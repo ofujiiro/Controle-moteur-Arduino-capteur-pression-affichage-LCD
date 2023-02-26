@@ -1,0 +1,56 @@
+#include <LiquidCrystal_I2C.h>
+//implémentation de la bibliothèque LiquidCrystal_I2C
+int val = 0; //création d'une variable en integer
+int val2 =0;//création d'une variable en integer
+
+void setup()
+{
+  LiquidCrystal_I2C lcd(0x27, 16, 2);//définition de l'adresse
+  //de l'écran en hex et de la résolution d'affichage
+  lcd.init(); //initialisation de l'écran LCD
+  lcd.backlight(); //initialisation du rétroéclairage
+  lcd.setCursor(0, 0);//définition de l'emplacement du curseur
+  pinMode(A0, INPUT);//le pin analogique 0 reçois des données
+  pinMode(A1, INPUT);//le pin analogique 1 reçois des données
+  Serial.begin(9600);//définition de la fréquence
+  //de transmission (ici 9600 baud)
+}
+
+void loop()
+{
+  LiquidCrystal_I2C lcd(0x27, 16, 2);
+  val = analogRead(A0);
+  val2 = analogRead(A1);
+  Serial.println(val);//affichage des valeurs dans le
+  //moniteur série
+  Serial.println(val2);
+  
+  if (val > 170) { //si la valeur captée est supérieure à 170
+    pinMode(2, HIGH);//enclencher relais 1 (allumage moteur 1)
+  lcd.backlight();
+ lcd.setCursor(0, 1);
+ lcd.print("MOTEUR1 ON.");//afficher l'état du moteur1
+  }
+  
+  if (val < 170) {//si la valeur captée est supérieure à 170
+    pinMode(2, LOW);//éteindre relais 1 (éteindre moteur 1)
+   lcd.backlight();
+ lcd.setCursor(0, 1);
+    lcd.print("MOTEUR1 OFF");//afficher l'état du moteur1
+  }
+
+
+
+  if (val2 > 170) {//si la valeur captée est supérieure à 170
+    pinMode(3, HIGH);//enclencher relais 2 (allumer moteur 2)
+  lcd.backlight();
+ lcd.setCursor(0, 2);
+    lcd.print("MOTEUR2 ON.");//afficher l'état du moteur1
+  }
+  if (val2 < 170) {//si la valeur captée est inférieure à 170
+    pinMode(3, LOW);//éteindre relais 2 (éteindre moteur 2)
+  lcd.backlight();
+ lcd.setCursor(0, 2);
+    lcd.print("MOTEUR2 OFF");//afficher l'état du moteur1
+  }
+}
